@@ -1,0 +1,150 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+
+    list-style-type: none;
+    text-decoration: none;
+    color: rgba(0, 0, 0, 0.8);
+}
+
+.wr-widget {
+    position: relative;
+
+    display: flex;
+    width: 920px;
+    min-height: 500px;
+    margin: 40px auto;
+    padding: 20px;
+
+    border: 5px solid #ECECEC;
+    border-radius: 10px;
+    background: no-repeat url(../img/background-widget.png);
+    background-position: center;
+
+    flex-direction: column;
+    align-items: center;
+}
+
+.wr-add-ticket {
+    display: flex;
+    width: 100%;
+
+    justify-content: flex-end;
+}
+
+.widget__button-add-ticket {
+    height: 48px;
+    width: 195px;
+
+    background-color: #fff;
+    border: 1px solid #000;
+    border-radius: 10px;
+
+    cursor: pointer;
+}
+
+.ticket-container {
+    width: 890px;
+}
+
+.pop-up {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    display: none;
+
+    width: 520px;
+    padding: 20px;
+
+    border: 1px solid #000;
+    border-radius: 15px;
+    background-color: #fff;
+
+    transform: translate(-50%, -50%);
+}
+
+.pop-up-active {
+    display: block;
+}
+
+.header-pop-up {
+    margin-top: 20px;
+}
+
+.title-pop-up {
+    text-align: center;
+}
+
+.form-pop-up {
+    margin-top: 36px;
+}
+
+.wr-short-description,
+ .wr-full-description {
+    display: flex;
+    gap: 15px;
+
+    flex-direction: column;
+}
+
+.input-short-description {
+    width: 100%;
+    height: 36px;
+    padding: 5px;
+
+    border: 1px solid #000;
+ }
+
+.wr-full-description {
+    margin-top: 15px;
+}
+
+.input-full-description {
+    width: 100%;
+    min-height: 68px;
+    max-height: 68px;
+    min-width: 478px;
+    max-width: 478px;
+    padding: 5px;
+
+    border: 1px solid #000;
+
+    appearance: none;
+}
+
+.wr-buttons-form {
+    display: flex;
+    margin-top: 15px;
+    margin-bottom: 7px;
+    gap: 15px;
+
+    justify-content: flex-end;
+}
+
+.button-reset {
+    width: 114px;
+    height: 50px;
+
+    background-color: #fff;
+    border: 1px solid #000;
+    border-radius: 10px;
+
+    cursor: pointer;
+}
+
+.button-submit {
+    width: 75px;
+    height: 50px;
+
+    background-color: #fff;
+    border: 1px solid #000;
+    border-radius: 10px;
+
+    cursor: pointer;
+}

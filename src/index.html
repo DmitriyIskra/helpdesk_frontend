@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="wr-widget">
+        <div class="wr-add-ticket">
+            <button class="widget__button-add-ticket">Добавить тикет</button>
+        </div>
+        <div class="ticket-container"></div>
+
+        <div class="pop-up-add pop-up">
+            <header class="header-add-ticket header-pop-up">
+                <h2 class="title-add-ticket title-pop-up">Добавить тикет</h2>
+            </header>
+            <form class="form-add-ticket form-pop-up" action="http://localhost:7000">
+                <div class="short-description-add-ticket wr-short-description">
+                    <label class="label-short-description label-short-description-add" for="input-short-description-add">Краткое описание</label>
+                    <input class="input-short-description input-short-description-add" type="text" name="name" id="input-short-description-add">
+                </div>
+                <div class="full-description-add-ticket wr-full-description">
+                    <label class="label-full-description-add label-full-description" for="label-full-description-add">Подробное описание</label>
+                    <textarea  class="input-full-description-add input-full-description" type="text" name="description" id="label-full-description-add"></textarea>
+                </div>
+                <div class="wr-buttons-form-add wr-buttons-form">
+                    <button class="button-add-ticket-reset button-reset" type="reset">Отмена</button>
+                    <button class="button-add-ticket-submit button-submit" type="submit">Ок</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="pop-up-change pop-up">
+            <header class="header-change-ticket header-pop-up">
+                <h2 class="title-change-ticket title-pop-up">Изменить тикет</h2>
+            </header>
+            <form class="form-change-ticket form-pop-up" action="http://localhost:7000">
+                <div class="short-description-change-ticket wr-short-description">
+                    <label class="label-short-description label-short-description-change" for="input-short-description-change">Краткое описание</label>
+                    <input class="input-short-description input-short-description-change" type="text" name="name" id="input-short-description-change">
+                </div>
+                <div class="full-description-change-ticket wr-full-description">
+                    <label class="label-full-description-change label-full-description" for="label-full-description-change">Подробное описание</label>
+                    <textarea  class="input-full-description-change input-full-description" type="text" name="description" id="label-full-description-change"></textarea>
+                </div>
+                <div class="wr-buttons-form-change wr-buttons-form">
+                    <button class="button-change-ticket-reset button-reset" type="reset">Отмена</button>
+                    <button class="button-change-ticket-submit button-submit" type="submit">Ок</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="pop-up-delete pop-up">
+            <header class="header-change-ticket header-pop-up">
+                <h2 class="title-change-ticket title-pop-up">Удалить тикет</h2>
+            </header>
+            <p class="text-pop-up-delete">
+                Вы уверены, что хотите удалить тикет? Это действие необратимо.
+            </p>
+            <form class="form-change-ticket form-pop-up" action="http://localhost:7000">
+                <div class="wr-buttons-form-change wr-buttons-form">
+                    <button class="button-change-ticket-reset button-reset" type="reset">Отмена</button>
+                    <button class="button-change-ticket-submit button-submit" type="submit">Ок</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
