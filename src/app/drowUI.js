@@ -5,11 +5,13 @@ export default class DrowUI {
         this.modalAddTicket = this.widget.querySelector('.pop-up-add');
         this.http = http;
         this.moment = moment;
+        this.data = null;
     }
 
     start() {
-        let data = this.http.read()
-        console.log(data)
+        this.data = this.http.read()
+        this.data.forEach(item => console.log('item',item))
+        console.log('data data', this.data)
     }
 
     registerEventModal(buttonReset, modal, form) {

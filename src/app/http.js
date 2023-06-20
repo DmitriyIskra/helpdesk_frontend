@@ -1,18 +1,27 @@
 export default class Http {
     constructor() {
-        
+        this.data = null;
     }
     
     read() {
+        let data = [];
+
         const xhr = new XMLHttpRequest();
 
-        if(xhr.DONE === 4) {
-            return xhr.responseText;
-        }
+        xhr.addEventListener('readystatechange', (e) => {
+            if(e.target.readyState === 4) {
+                console.log('sbvv', e.target.responseText)
+
+                data[0] = e.target.responseText; 
+            }
+            
+        })
 
         xhr.open('GET', 'http://localhost:7070/?method=allTickets');
 
         xhr.send();
+
+        return data;
     }
 
     create(formData, method) {
