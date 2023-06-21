@@ -1,13 +1,12 @@
 import ControlWidget from "./controlWidget";
 import DrowUI from "./drowUI";
-import Constructor from "./constructor";
+import Redrawing from "./redrawing";
 import Http from "./http";
 import moment from 'moment-timezone';
 
 const widget = document.querySelector('.wr-widget');
 
-const http = new Http();
-const drowUI = new DrowUI(widget, moment, http);
+const drowUI = new DrowUI(widget, moment, Http, Redrawing);
 
-const controlWidget = new ControlWidget(drowUI, http);
+const controlWidget = new ControlWidget(drowUI);
 controlWidget.init();

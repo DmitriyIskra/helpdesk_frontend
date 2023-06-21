@@ -1,14 +1,13 @@
 export default class ControlWidget {
-    constructor (drowUI, http) {
+    constructor (drowUI) {
         this.drowUI = drowUI;
-        this.http = http;
 
         this.onClick = this.onClick.bind(this)
     }
 
     init() {
         this.drowUI.start();
-
+        console.log('work')
         this.drowUI.buttonAddTicket.addEventListener('click', this.onClick);
     }
 

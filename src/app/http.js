@@ -1,40 +1,66 @@
 export default class Http {
-    constructor() {
-        this.data = null;
+    constructor(redrawing) {
+        this.redrawing = redrawing;
     }
-    
+
     read() {
-        let data = [];
+        new Promise((resolve) => {
+            const xhr = new XMLHttpRequest();
 
-        const xhr = new XMLHttpRequest();
+            xhr.addEventListener('load', () => {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    try {
+                        // const data = JSON.parse(xhr.responseText);
+                        // Получаем свежие данные и отправляем в перерисовку
+                        // this.redrawing.createCards(data)
+                        sessionStorage.data = xhr.responseText
+                        return resolve()
+                    } catch (e) {
+                        console.error(e);
+                    }
+                }
+            }); 
 
-        xhr.addEventListener('readystatechange', (e) => {
-            if(e.target.readyState === 4) {
-                console.log('sbvv', e.target.responseText)
+            xhr.open('GET', 'http://localhost:7070/?method=allTickets');
 
-                data[0] = e.target.responseText; 
+            xhr.send();
+        })
+
+        
+
+        
+    }
+
+    create(formData, method) {
+        new Promise((resolve) => {
+            if(method === 'POST') {
+                
+                const xhr = new XMLHttpRequest();
+
+                xhr.addEventListener('load', () => {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        try {
+                            // const data = JSON.parse(xhr.responseText);
+                            // Получаем свежие данные и отправляем в перерисовку
+                            // this.redrawing.createCards(data)
+                            console.log('create', xhr.responseText)
+                            sessionStorage.data = xhr.responseText
+                            return resolve()
+                        } catch (e) {
+                            console.error(e);
+                        }
+                    }
+                })
+                
+    
+                xhr.open('POST', 'http://localhost:7070/?method=createTicket');
+    
+                xhr.send(formData);
             }
             
         })
 
-        xhr.open('GET', 'http://localhost:7070/?method=allTickets');
-
-        xhr.send();
-
-        return data;
-    }
-
-    create(formData, method) {
-        // в formData нужно добавлять id = null status created а на сервере уже формировать по двум папкам short и full
-        if(method === 'POST') {
-            const xhr = new XMLHttpRequest();
-
-            // ПОЛУЧЕМ ДАННЫЕ ДЛЯ ПЕРЕРИСОВКИ......
-
-            xhr.open('POST', 'http://localhost:7070/?method=createTicket');
-
-            xhr.send(formData);
-        }
+        
     }
 
     
