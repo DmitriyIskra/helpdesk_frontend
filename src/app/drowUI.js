@@ -106,13 +106,25 @@ export default class DrowUI {
         this.formEditTicket.addEventListener('submit', e => {
             e.preventDefault();
 
-            const newDate = getDate();
+            const newDate = this.getDate();
+            const status = this.activeCard.querySelector('.status');
 
             let formData = new FormData(this.formEditTicket);
 
-            this.modalEditTicket.classList.remove('pop-up-active'); 
+            formData.append('id', this.activeCardId);
+            formData.append('created', newDate);
+            if(status.matches('.status-active')) {
+                formData.append('status', 'true');
+            } else {
+                formData.append('status', 'false');
+            }
 
-            this.http.update(this.activeCardId, 'ticketEdit', this.redrowCards)
+            // очищаем контейнер
+            this.clearContainer();
+
+            this.http.update(formData, 'ticketEdit', this.redrowCards);
+
+            this.modalEditTicket.classList.remove('pop-up-active'); 
         }, {once: true})
 
         this.http.read(this.activeCardId, 'ticketById', this.addDatatoEditForm)

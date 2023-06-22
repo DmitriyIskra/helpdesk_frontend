@@ -74,8 +74,10 @@ export default class Http {
 
     // в метод передаем например changeStatus, callback это redrowCards
     update(formData, method, callback) {
+        let xhr;
+
         if(method === 'changeStatus') {
-            const xhr = new XMLHttpRequest()
+            xhr = new XMLHttpRequest()
             
             xhr.addEventListener('load', e => {
                 if(xhr.status >= 200 && xhr.status < 300) {
@@ -86,17 +88,27 @@ export default class Http {
                     } catch(error) {
                         console.error(error);
                     }
-                    
                 }
             })
 
             xhr.open('PATCH', `http://localhost:7070/?method=${method}`);
             
-            xhr.send(formData)
+            xhr.send(formData);
         }
 
         if(method === 'ticketEdit') {
-            
+            xhr = new XMLHttpRequest();
+
+            xhr.addEventListener('load', e => {
+                if(xhr.status >= 200 && xhr.status < 300) {
+                    this.read(null, 'allTickets', callback);
+                    console.log('xhr.status')
+                }
+            })
+
+            xhr.open('PATCH', `http://localhost:7070/?method=${method}`);
+
+            xhr.send(formData);
         }
     }
 

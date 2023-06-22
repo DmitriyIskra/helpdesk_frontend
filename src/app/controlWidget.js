@@ -51,7 +51,6 @@ export default class ControlWidget {
             this.drowUI.showDescription(e.target);
         } else if(e.target.matches('.text-card') && e.target.matches('.active')) {
             this.drowUI.hideDescription(e.target);
-            console.log('unactive')
         }
        
         // открываем модальное окно подтверждения удаления, в дальнейшем можно через подстановку имени класса и свести к одному методу  
