@@ -161,6 +161,7 @@
     background-color: #fff;
 
     justify-content: space-between;
+    flex-wrap: wrap;
 }
 
 .wr-name-status {
@@ -238,4 +239,10 @@
     border-radius: 50%;
 
     cursor: pointer;
+}
+
+.description {
+    width: 45%;
+    margin-top: 10px;
+    margin-left: 56px;
 }

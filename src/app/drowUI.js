@@ -1,22 +1,40 @@
 
 
 export default class DrowUI {
-    constructor(widget, moment, http, redrawing) {
+    constructor(widget, moment, http) {
         this.widget = widget;
+
         this.buttonAddTicket = this.widget.querySelector('.widget__button-add-ticket');
         this.modalAddTicket = this.widget.querySelector('.pop-up-add');
+
+        this.modalDeleteticket = this.widget.querySelector('.pop-up-delete');
+
+        this.modalEditTicket = this.widget.querySelector('.pop-up-change');
+        this.formEditTicket = this.modalEditTicket.querySelector('.form-change-ticket');
+
         this.ticketContainer = this.widget.querySelector('.ticket-container');
-        this.redrawing = new redrawing(this.ticketContainer);
-        this.http = new http(this.redrawing);
+
+        this.http = http;
         this.moment = moment;
-        this.data = null;
+
+        this.activeCard = null;
+        this.activeCardId = null;
+
+        this.description = null;
+
+        this.redrowCards = this.redrowCards.bind(this);
+        this.registerEventModal = this.registerEventModal.bind(this);
+        this.addTextDescription = this.addTextDescription.bind(this);
+        this.addDatatoEditForm = this.addDatatoEditForm.bind(this)
     }
 
 
-    async start() {
-        await this.http.read();
-        this.redrowCards();
+    start() {
+        this.http.read(null, 'allTickets', this.redrowCards);
     }
+
+
+    // РАБОТА ДОБАВЛЕНИЯ ТИКЕТА
 
     registerEventModal(buttonReset, modal, form) {
         buttonReset.addEventListener('click', e => {
@@ -34,22 +52,19 @@ export default class DrowUI {
                 formData.set('created', date);
 
                 
-
+                // скрываем модальное окно добавить тикет
                 this.hideModal(modal);
-
+                // очищаем контейнер
                 this.clearContainer();
-                this.create(formData)
-                this.redrowCards();
-                sessionStorage.removeItem('data')
-                form.reset();
+
+                // отправляем данные на сервер, о создании тикета
+                this.http.create(formData, 'POST', this.redrowCards);
+
+                // сбрасываем форму в модальном окне
+                this.resetForm(form);
                 
             }
         }, {once: true});
-    }
-
-    async create (formData) {
-        await this.http.create(formData, 'POST');
-        await this.http.read();
     }
 
     showModalAddTicket() {
@@ -61,13 +76,125 @@ export default class DrowUI {
         this.registerEventModal(buttonReset, this.modalAddTicket, form);
     }
 
-    redrowCards() {
+    // --------------------------------------------------------------- 
+
+
+    // РАБОТА МОДАЛЬНОГО ОКНА УДАЛЕНИЯ
+
+    controlModalDelete() {     
+            // закрываем модальное окно удаления
+            this.hideModal(this.modalDeleteticket);
+            
+            // очищаем контейнер
+            this.clearContainer();
+            
+            this.http.delete(this.activeCardId, this.redrowCards);
+    }
+// ----------------------------------------------------------------
+
+// ----------------- РАБОТА МОДАЛЬНОГО ОКНА РЕДАКТИРОВАНИЯ
+
+    showModalEditTicket() {
+        this.modalEditTicket.classList.add('pop-up-active');
+
+        // сброс и закрытие окна
+        this.formEditTicket.addEventListener('reset', e => {
+            this.modalEditTicket.classList.remove('pop-up-active');     
+        }, {once: true}) 
+
+        // Сбор данных, отправка и закрытие окна
+        this.formEditTicket.addEventListener('submit', e => {
+            e.preventDefault();
+
+            const newDate = getDate();
+
+            let formData = new FormData(this.formEditTicket);
+
+            this.modalEditTicket.classList.remove('pop-up-active'); 
+
+            this.http.update(this.activeCardId, 'ticketEdit', this.redrowCards)
+        }, {once: true})
+
+        this.http.read(this.activeCardId, 'ticketById', this.addDatatoEditForm)
+    }
+
+    addDatatoEditForm(json) {
+        let data = JSON.parse(json)
+
+        this.formEditTicket.name.value = data.name;
+        this.formEditTicket.description.value = data.description;
+    }
+// --------------------------------------------------
+
+
+// -------------- РАБОТА ТИКЕТОВ
+    changeStatus() {
+        const formData = new FormData();
+        formData.append('id', this.activeCardId);
+
+        this.clearContainer();
+
+        this.http.update(formData, 'changeStatus', this.redrowCards);
+    }
+
+
+
+    showDescription(name) {
+        name.classList.add('active');
+
+        this.description = document.createElement('div');
+        this.description.classList.add('description');
+
+        this.activeCard.append(this.description);
+
+        this.http.read(this.activeCardId, 'ticketById', this.addTextDescription);
+    }
+
+    addTextDescription(data) {
+        this.description.textContent = JSON.parse(data).description;
+    }
+
+    hideDescription(name) {
+        name.classList.remove('active');
+
+        const description = this.activeCard.querySelector('.description');
+        description.remove();
+    }
+// -----------------------------------------------------------------------
+
+
+
+    // скрываем модальное окно
+    hideModal(modal) {
+        modal.classList.remove('pop-up-active');
+    }
+
+    // Сброс формы
+    resetForm(form) {
+        form.reset()
+    }
+
+    // получение текущей даты и времени 
+    getDate() {
+        return this.moment().format('DD.MM.YY HH:mm');
+    }
+
+
+    // очистка контейнера
+    clearContainer() {
+        let cards = [...this.ticketContainer.querySelectorAll('.card')]
+
+        cards.forEach( item => item.remove())
+    }
+
+
+
+    redrowCards(json) {
         try {
-            const data = JSON.parse(sessionStorage.data)
+            const data = JSON.parse(json)
 
             data.forEach( item => {
             
-
                 const card = document.createElement('div');
                 card.classList.add('card');
                 card.setAttribute('id', `${item.id}`);
@@ -79,7 +206,7 @@ export default class DrowUI {
     
                 const status = document.createElement('div');
                 status.classList.add('status');
-                if(item.status === true) {
+                if(item.status === 'true') {
                     status.classList.add('status-active');
                 } else {
                     status.classList.remove('status-active');
@@ -107,7 +234,6 @@ export default class DrowUI {
                 const deleteCard = document.createElement('div');
                 deleteCard.classList.add('delete-card');
     
-    
                 wrEditDelete.append(editCard);
                 wrEditDelete.append(deleteCard);
     
@@ -129,19 +255,9 @@ export default class DrowUI {
         
     }
 
-    hideModal(el) {
-        el.classList.remove('pop-up-active');
-    }
 
-    getDate() {
-        return this.moment().format('DD.MM.YY HH:mm');
-    }
 
-    clearContainer() {
-        let cards = [...this.ticketContainer.querySelectorAll('.card')]
-
-        cards.forEach( item => item.remove())
-    }
+    
 
     // метод ПЕРЕРИСОВКА при  изменениях
 }
